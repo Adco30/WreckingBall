@@ -2,9 +2,9 @@ import SpriteKit
 import Combine
 
 final class GameController: ObservableObject {
-    let world = World()
+    private let world: World
     private let params: PhysicsParameters
-    private weak var scene: GameScene?
+    unowned let scene: GameScene?
     private var cancellables = Set<AnyCancellable>()
     private var ball: Entity?
     private var blocks: [Entity] = []
@@ -13,12 +13,13 @@ final class GameController: ObservableObject {
     init(scene: GameScene, params: PhysicsParameters){
         self.scene = scene
         self.params = params
+        self.world = scene.world
         setup()
     }
 
     private func setup(){
         let renderSys = RenderSystem(world: world)
-        scene.map { world.addSystem(InputSystem(scene: $0, world: world)) }
+        scene.map { world.addSystem(InputSystem(scene: $0, world: world, params: params)) }
         world.addSystem(renderSys)
 
         params.$slingshotX.sink    { [weak self] _ in self?.updateSlingshot() }.store(in:&cancellables)
@@ -64,14 +65,33 @@ final class GameController: ObservableObject {
         ball = e
     }
 
-    private func createBlocks(){
+    private func makeBlock(at p: CGPoint) -> Entity {
+        let e = Entity()
+        let node = SKSpriteNode(color: .brown, size: CGSize(width: 40, height: 40))
+        node.position = p
+        let body = SKPhysicsBody(rectangleOf: node.size)
+        body.mass        = params.blockMass
+        body.restitution = params.blockRestitution
+        body.friction    = params.blockFriction
+        node.physicsBody = body
+
+        e.add(RenderComponent(node: node))
+        e.add(TransformComponent(p))
+        e.add(PhysicsComponent())
+        e.add(BlockComponent())
+
+        scene?.addChild(node)
+        return e
+    }
+
+    private func createBlocks() {
         guard let s = scene else { return }
-        blocks.forEach {
-            $0.get(RenderComponent.self)?.node.removeFromParent()
-            world.send(.restarted)
-        }
+
+        blocks.forEach { $0.get(RenderComponent.self)?.node.removeFromParent() }
+        world.send(.restarted)
         blocks.removeAll()
-        let base = s.size.width * params.stackX
+
+        let base   = s.size.width * params.stackX
         let size: CGFloat = 40
         let positions = [
             CGPoint(x: base - size,    y: s.slingshotTop().y),
@@ -79,24 +99,13 @@ final class GameController: ObservableObject {
             CGPoint(x: base + size,    y: s.slingshotTop().y),
             CGPoint(x: base - size/2,  y: s.slingshotTop().y + size),
             CGPoint(x: base + size/2,  y: s.slingshotTop().y + size),
-            CGPoint(x: base,           y: s.slingshotTop().y + size*2)
+            CGPoint(x: base,           y: s.slingshotTop().y + size * 2)
         ]
-        for p in positions {
-            let e = Entity()
-            let node = SKSpriteNode(color: .brown, size: CGSize(width: size, height: size))
-            node.position = p
-            let body = SKPhysicsBody(rectangleOf: node.size)
-            body.mass = params.blockMass
-            body.restitution = params.blockRestitution
-            body.friction = params.blockFriction
-            node.physicsBody = body
-            e.add(RenderComponent(node: node))
-            e.add(TransformComponent(p))
-            e.add(PhysicsComponent())
-            e.add(BlockComponent())
+
+        blocks = positions.map { pos in
+            let e = makeBlock(at: pos)
             world.add(e)
-            s.addChild(node)
-            blocks.append(e)
+            return e
         }
     }
 

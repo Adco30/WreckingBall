@@ -6,8 +6,6 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
     private let coord: Coordinate
     private var slingshotNode: SKNode?
     private var bands: [SKShapeNode] = []
-    private var draggingBall: SKShapeNode?
-    private var ballStartPos: CGPoint?
     var slingshotHeight: CGFloat { CGFloat(params.slingHeight) }
     var groundHeight: CGFloat { coord.groundHeight }
 
@@ -82,34 +80,18 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let t = touches.first else { return }
         let loc = t.location(in: self)
-        if let ball = childNode(withName: "ball") as? SKShapeNode, ball.contains(loc) {
-            draggingBall = ball
-            ballStartPos = ball.position
-            ball.physicsBody?.isDynamic = false
-            updateBands(ball: loc)
-        }
+        world.send(.touchBegan(loc))
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let t = touches.first, let ball = draggingBall else { return }
+        guard let t = touches.first else { return }
         let loc = t.location(in: self)
-        ball.position = loc
-        updateBands(ball: loc)
+        world.send(.touchMoved(loc))
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let t = touches.first, let ball = draggingBall, let start = ballStartPos else { return }
+        guard let t = touches.first else { return }
         let loc = t.location(in: self)
-        let v = CGVector(dx: start.x - loc.x, dy: start.y - loc.y)
-        if v.length() > 10 {
-            ball.physicsBody?.isDynamic = true
-            let imp = CGVector(dx: v.dx * CGFloat(params.impulse)*2.5, dy: v.dy * CGFloat(params.impulse)*3.5)
-            ball.physicsBody?.applyImpulse(imp)
-        } else {
-            ball.position = start
-        }
-        resetBands()
-        draggingBall = nil
-        ballStartPos = nil
+        world.send(.touchEnded(loc))
     }
 }

@@ -56,10 +56,11 @@ struct ContentView: View {
 
 struct GameView: UIViewRepresentable {
     let params: PhysicsParameters
+    static let sharedWorld = World()
+    
     func makeUIView(context: Context) -> SKView {
         let v = SKView()
-        let world = World()
-        let scene = GameScene(size: v.bounds.size, params: params, world: world)
+        let scene = GameScene(size: v.bounds.size, params: params, world: GameView.sharedWorld)
         v.presentScene(scene)
         let controller = GameController(scene: scene, params: params)
         scene.userData = ["controller": controller]
@@ -67,6 +68,7 @@ struct GameView: UIViewRepresentable {
         v.showsNodeCount = true
         return v
     }
+    
     func updateUIView(_ uiView: SKView, context: Context) {
         if let scene = uiView.scene as? GameScene,
            let controller = scene.userData?["controller"] as? GameController {

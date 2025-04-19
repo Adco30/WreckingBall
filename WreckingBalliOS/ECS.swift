@@ -51,6 +51,9 @@ enum GameEvent {
     case ballLaunched(Entity, CGVector)
     case ballMoved(Entity, CGPoint)
     case restarted
+    case touchBegan(CGPoint)
+    case touchMoved(CGPoint)
+    case touchEnded(CGPoint)
 }
 
 final class World {
