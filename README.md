@@ -22,7 +22,7 @@ A small iOS app demonstrating:
 
 ## 🚀 Getting Started
 ```bash
-git clone (https://github.com/Adco30/WreckingBall/)
+git clone https://github.com/Adco30/WreckingBall
 open WreckingBalliOS.xcodeproj
 ⌘R
 ```
