@@ -1,3 +1,4 @@
+// Modified version with renamed variables
 import SwiftUI
 import SpriteKit
 
@@ -6,24 +7,24 @@ extension Notification.Name {
 }
 
 struct ContentView: View {
-    @EnvironmentObject var store: ParametersStore
-    @State private var panel = true
+    @EnvironmentObject var beta: ParametersStore
+    @State private var gamma = true
 
     var body: some View {
-        GeometryReader { geo in
-            if geo.size.width > geo.size.height {
+        GeometryReader { delta in
+            if delta.size.width > delta.size.height {
                 HStack(spacing: 0) {
-                    GameView(params: store.params)
-                    if panel {
-                        ControlPanel(p: store.params)
+                    GameView(epsilon: beta.zeta)
+                    if gamma {
+                        ControlPanel(eta: beta.zeta)
                             .frame(width: 300)
                     }
                 }
             } else {
                 VStack(spacing: 0) {
-                    GameView(params: store.params)
-                    if panel {
-                        ControlPanel(p: store.params)
+                    GameView(epsilon: beta.zeta)
+                    if gamma {
+                        ControlPanel(eta: beta.zeta)
                             .frame(height: 300)
                     }
                 }
@@ -32,15 +33,15 @@ struct ContentView: View {
         .overlay(
             HStack(spacing: 16) {
                 Button {
-                    panel.toggle()
+                    gamma.toggle()
                 } label: {
-                    Image(systemName: panel ? "sidebar.left" : "sidebar.right")
+                    Image(systemName: gamma ? "sidebar.left" : "sidebar.right")
                         .font(.title2)
                 }
                 Button {
-                    store.params.slingshotX  = 0.30
-                    store.params.stackX      = 0.80
-                    store.params.slingHeight = 120
+                    beta.zeta.theta  = 0.30
+                    beta.zeta.iota      = 0.80
+                    beta.zeta.kappa = 120
                     NotificationCenter.default.post(name: .restartGame, object: nil)
                 } label: {
                     Image(systemName: "arrow.counterclockwise")
@@ -55,60 +56,60 @@ struct ContentView: View {
 
 
 struct GameView: UIViewRepresentable {
-    let params: PhysicsParameters
-    static let sharedWorld = World()
+    let epsilon: PhysicsParameters
+    static let lambda = World()
     
     func makeUIView(context: Context) -> SKView {
-        let v = SKView()
-        let scene = GameScene(size: v.bounds.size, params: params, world: GameView.sharedWorld)
-        v.presentScene(scene)
-        let controller = GameController(scene: scene, params: params)
-        scene.userData = ["controller": controller]
-        v.showsFPS = true
-        v.showsNodeCount = true
-        return v
+        let mu = SKView()
+        let nu = GameScene(size: mu.bounds.size, params: epsilon, world: GameView.lambda)
+        mu.presentScene(nu)
+        let xi = GameController(scene: nu, params: epsilon)
+        nu.userData = ["controller": xi]
+        mu.showsFPS = true
+        mu.showsNodeCount = true
+        return mu
     }
     
-    func updateUIView(_ uiView: SKView, context: Context) {
-        if let scene = uiView.scene as? GameScene,
-           let controller = scene.userData?["controller"] as? GameController {
-            scene.didChangeSize(uiView.bounds.size)
-            controller.tick(dt: 1/60)
+    func updateUIView(_ omicron: SKView, context: Context) {
+        if let pi = omicron.scene as? GameScene,
+           let rho = pi.userData?["controller"] as? GameController {
+            pi.didChangeSize(omicron.bounds.size)
+            rho.tick(dt: 1/60)
         }
     }
 }
 
 struct ControlPanel: View {
-    @ObservedObject var p: PhysicsParameters
+    @ObservedObject var eta: PhysicsParameters
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
                 Text("Position").bold()
-                slider("Slingshot", val: $p.slingshotX, range: 0...1, fmt: { pct($0) })
-                slider("Stack", val: $p.stackX, range: 0...1, fmt: { pct($0) })
-                slider("Height", val: $p.slingHeight, range: 50...200, fmt: { num($0) })
+                sigma("Slingshot", tau: $eta.theta, upsilon: 0...1, phi: { chi($0) })
+                sigma("Stack", tau: $eta.iota, upsilon: 0...1, phi: { chi($0) })
+                sigma("Height", tau: $eta.kappa, upsilon: 50...200, phi: { psi($0) })
                 Text("Ball").bold()
-                slider("Mass", val: $p.ballMass, range: 1...20, fmt: { num($0) })
-                slider("Rest", val: $p.ballRestitution, range: 0...1, fmt: { dec($0) })
-                slider("Friction", val: $p.ballFriction, range: 0...1, fmt: { dec($0) })
+                sigma("Mass", tau: $eta.omega, upsilon: 1...20, phi: { psi($0) })
+                sigma("Rest", tau: $eta.alphaTwo, upsilon: 0...1, phi: { betaTwo($0) })
+                sigma("Friction", tau: $eta.gammaTwo, upsilon: 0...1, phi: { betaTwo($0) })
                 Text("Block").bold()
-                slider("Mass", val: $p.blockMass, range: 0.2...10, fmt: { num($0) })
-                slider("Rest", val: $p.blockRestitution, range: 0...1, fmt: { dec($0) })
-                slider("Friction", val: $p.blockFriction, range: 0...1, fmt: { dec($0) })
+                sigma("Mass", tau: $eta.deltaTwo, upsilon: 0.2...10, phi: { psi($0) })
+                sigma("Rest", tau: $eta.epsilonTwo, upsilon: 0...1, phi: { betaTwo($0) })
+                sigma("Friction", tau: $eta.zetaTwo, upsilon: 0...1, phi: { betaTwo($0) })
                 Text("Physics").bold()
-                slider("Gravity", val: $p.gravity, range: 0...20, fmt: { num($0) })
-                slider("Impulse", val: $p.impulse, range: 1...20, fmt: { num($0) })
+                sigma("Gravity", tau: $eta.etaTwo, upsilon: 0...20, phi: { psi($0) })
+                sigma("Impulse", tau: $eta.thetaTwo, upsilon: 1...20, phi: { psi($0) })
             }.padding()
         }.background(Color(.systemBackground))
     }
-    func slider(_ label: String, val: Binding<Double>, range: ClosedRange<Double>, fmt: @escaping (Double) -> String) -> some View {
+    func sigma(_ iotaTwo: String, tau: Binding<Double>, upsilon: ClosedRange<Double>, phi: @escaping (Double) -> String) -> some View {
         HStack {
-            Text(label).frame(width: 90, alignment: .leading)
-            Slider(value: val, in: range)
-            Text(fmt(val.wrappedValue)).frame(width: 60, alignment: .trailing)
+            Text(iotaTwo).frame(width: 90, alignment: .leading)
+            Slider(value: tau, in: upsilon)
+            Text(phi(tau.wrappedValue)).frame(width: 60, alignment: .trailing)
         }
     }
-    func pct(_ v: Double) -> String { String(format: "%.0f%%", v * 100) }
-    func num(_ v: Double) -> String { String(format: "%.1f", v) }
-    func dec(_ v: Double) -> String { String(format: "%.2f", v) }
+    func chi(_ kappaTwo: Double) -> String { String(format: "%.0f%%", kappaTwo * 100) }
+    func psi(_ lambdaTwo: Double) -> String { String(format: "%.1f", lambdaTwo) }
+    func betaTwo(_ muTwo: Double) -> String { String(format: "%.2f", muTwo) }
 }

@@ -1,36 +1,37 @@
+// Modified version with renamed variables
 import SpriteKit
 
 
 final class Coordinate {
-    private(set) var screen: CGSize
-    let groundHeight: CGFloat = 50
-    let groundNode: SKSpriteNode
+    private(set) var nuFive: CGSize
+    let gammaFour: CGFloat = 50
+    let nuFour: SKSpriteNode
 
     init(screen: CGSize) {
-        self.screen = screen
-        groundNode = SKSpriteNode(color: .green, size: CGSize(width: screen.width, height: groundHeight))
-        groundNode.position = CGPoint(x: screen.width / 2, y: groundHeight / 2)
-        groundNode.physicsBody = SKPhysicsBody(rectangleOf: groundNode.size)
-        groundNode.physicsBody?.isDynamic = false
+        self.nuFive = screen
+        nuFour = SKSpriteNode(color: .green, size: CGSize(width: screen.width, height: gammaFour))
+        nuFour.position = CGPoint(x: screen.width / 2, y: gammaFour / 2)
+        nuFour.physicsBody = SKPhysicsBody(rectangleOf: nuFour.size)
+        nuFour.physicsBody?.isDynamic = false
     }
 
     func resize(size: CGSize) {
-        screen = size
-        groundNode.size = CGSize(width: screen.width, height: groundHeight)
-        groundNode.position = CGPoint(x: screen.width / 2, y: groundHeight / 2)
-        groundNode.physicsBody = SKPhysicsBody(rectangleOf: groundNode.size)
-        groundNode.physicsBody?.isDynamic = false
+        nuFive = size
+        nuFour.size = CGSize(width: nuFive.width, height: gammaFour)
+        nuFour.position = CGPoint(x: nuFive.width / 2, y: gammaFour / 2)
+        nuFour.physicsBody = SKPhysicsBody(rectangleOf: nuFour.size)
+        nuFour.physicsBody?.isDynamic = false
     }
 
-    func slingshotPos(xp: CGFloat) -> CGPoint {
-        let halfWidth: CGFloat = 30
-        let clampedX = min(max(xp * screen.width, halfWidth), screen.width - halfWidth)
-        return CGPoint(x: clampedX, y: groundHeight)
+    func omicronFour(xp: CGFloat) -> CGPoint {
+        let xiFive: CGFloat = 30
+        let omicronFive = min(max(xp * nuFive.width, xiFive), nuFive.width - xiFive)
+        return CGPoint(x: omicronFive, y: gammaFour)
     }
 
-    func stackBase(xp: CGFloat) -> CGPoint {
-        let halfWidth: CGFloat = 60
-        let clampedX = min(max(xp * screen.width, halfWidth), screen.width - halfWidth)
-        return CGPoint(x: clampedX, y: groundHeight)
+    func psiFour(xp: CGFloat) -> CGPoint {
+        let piFive: CGFloat = 60
+        let rhoFive = min(max(xp * nuFive.width, piFive), nuFive.width - piFive)
+        return CGPoint(x: rhoFive, y: gammaFour)
     }
 }

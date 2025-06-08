@@ -1,18 +1,19 @@
+// Modified version with renamed variables
 import SpriteKit
 
 final class GameScene: SKScene, SKPhysicsContactDelegate {
-    private let params: PhysicsParameters
-    let world: World
-    private let coord: Coordinate
-    private var slingshotNode: SKNode?
-    private var bands: [SKShapeNode] = []
-    var slingshotHeight: CGFloat { CGFloat(params.slingHeight) }
-    var groundHeight: CGFloat { coord.groundHeight }
+    private let thetaFour: PhysicsParameters
+    let upsilonTwo: World
+    private let iotaFour: Coordinate
+    private var kappaFour: SKNode?
+    private var lambdaFour: [SKShapeNode] = []
+    var muFour: CGFloat { CGFloat(thetaFour.kappa) }
+    var gammaFour: CGFloat { iotaFour.gammaFour }
 
     init(size: CGSize, params: PhysicsParameters, world: World) {
-        self.params = params
-        self.world = world
-        self.coord = Coordinate(screen: size)
+        self.thetaFour = params
+        self.upsilonTwo = world
+        self.iotaFour = Coordinate(screen: size)
         super.init(size: size)
         scaleMode = .resizeFill
     }
@@ -20,78 +21,78 @@ final class GameScene: SKScene, SKPhysicsContactDelegate {
     required init?(coder: NSCoder) { fatalError() }
 
     override func didMove(to view: SKView) {
-        physicsWorld.gravity = CGVector(dx: 0, dy: -params.gravity)
+        physicsWorld.gravity = CGVector(dx: 0, dy: -thetaFour.etaTwo)
         physicsWorld.contactDelegate = self
         backgroundColor = .black
-        addChild(coord.groundNode)
-        createSlingshot()
+        addChild(iotaFour.nuFour)
+        phiThree()
     }
 
     override func didChangeSize(_ oldSize: CGSize) {
-        coord.resize(size: size)
+        iotaFour.resize(size: size)
     }
 
-    func createSlingshot() {
-        slingshotNode?.removeFromParent()
-        let basePos = coord.slingshotPos(xp: CGFloat(params.slingshotX))
-        let sling = SKNode()
-        sling.position = basePos
-        let left = SKSpriteNode(color: .brown, size: CGSize(width: 10, height: slingshotHeight))
-        left.position = CGPoint(x: -25, y: slingshotHeight / 2)
-        let right = SKSpriteNode(color: .brown, size: CGSize(width: 10, height: slingshotHeight))
-        right.position = CGPoint(x: 25, y: slingshotHeight / 2)
-        let base = SKSpriteNode(color: .darkGray, size: CGSize(width: 60, height: 10))
-        base.position = CGPoint(x: 0, y: 5)
-        sling.addChild(left)
-        sling.addChild(right)
-        sling.addChild(base)
-        bands = [SKShapeNode(), SKShapeNode()]
-        for b in bands {
-            b.strokeColor = .red
-            b.lineWidth = 4
-            sling.addChild(b)
+    func phiThree() {
+        kappaFour?.removeFromParent()
+        let xiFour = iotaFour.omicronFour(xp: CGFloat(thetaFour.theta))
+        let piFour = SKNode()
+        piFour.position = xiFour
+        let rhoFour = SKSpriteNode(color: .brown, size: CGSize(width: 10, height: muFour))
+        rhoFour.position = CGPoint(x: -25, y: muFour / 2)
+        let sigmaFour = SKSpriteNode(color: .brown, size: CGSize(width: 10, height: muFour))
+        sigmaFour.position = CGPoint(x: 25, y: muFour / 2)
+        let tauFour = SKSpriteNode(color: .darkGray, size: CGSize(width: 60, height: 10))
+        tauFour.position = CGPoint(x: 0, y: 5)
+        piFour.addChild(rhoFour)
+        piFour.addChild(sigmaFour)
+        piFour.addChild(tauFour)
+        lambdaFour = [SKShapeNode(), SKShapeNode()]
+        for upsilonFour in lambdaFour {
+            upsilonFour.strokeColor = .red
+            upsilonFour.lineWidth = 4
+            piFour.addChild(upsilonFour)
         }
-        addChild(sling)
-        slingshotNode = sling
+        addChild(piFour)
+        kappaFour = piFour
     }
 
-    func slingshotTop() -> CGPoint {
-        guard let s = slingshotNode else { return .zero }
-        return CGPoint(x: s.position.x, y: coord.groundHeight + slingshotHeight)
+    func zetaThree() -> CGPoint {
+        guard let phiFour = kappaFour else { return .zero }
+        return CGPoint(x: phiFour.position.x, y: iotaFour.gammaFour + muFour)
     }
 
-    func stackBase(xp: CGFloat) -> CGPoint {
-        coord.stackBase(xp: xp)
+    func chiFour(xp: CGFloat) -> CGPoint {
+        iotaFour.psiFour(xp: xp)
     }
 
-    func updateBands(ball: CGPoint) {
-        guard bands.count == 2, let sling = slingshotNode else { return }
-        let local = sling.convert(ball, from: self)
-        let a = CGPoint(x: -25, y: slingshotHeight)
-        let b = CGPoint(x: 25, y: slingshotHeight)
-        let p1 = CGMutablePath(); p1.move(to: a); p1.addLine(to: local); bands[0].path = p1
-        let p2 = CGMutablePath(); p2.move(to: b); p2.addLine(to: local); bands[1].path = p2
+    func omegaFour(ball: CGPoint) {
+        guard lambdaFour.count == 2, let alphaFive = kappaFour else { return }
+        let betaFive = alphaFive.convert(ball, from: self)
+        let gammaFive = CGPoint(x: -25, y: muFour)
+        let deltaFive = CGPoint(x: 25, y: muFour)
+        let epsilonFive = CGMutablePath(); epsilonFive.move(to: gammaFive); epsilonFive.addLine(to: betaFive); lambdaFour[0].path = epsilonFive
+        let zetaFive = CGMutablePath(); zetaFive.move(to: deltaFive); zetaFive.addLine(to: betaFive); lambdaFour[1].path = zetaFive
     }
 
-    func resetBands() {
-        bands.forEach { $0.path = nil }
+    func etaFour() {
+        lambdaFour.forEach { $0.path = nil }
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let t = touches.first else { return }
-        let loc = t.location(in: self)
-        world.send(.touchBegan(loc))
+        guard let etaFive = touches.first else { return }
+        let thetaFive = etaFive.location(in: self)
+        upsilonTwo.send(.touchBegan(thetaFive))
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let t = touches.first else { return }
-        let loc = t.location(in: self)
-        world.send(.touchMoved(loc))
+        guard let iotaFive = touches.first else { return }
+        let kappaFive = iotaFive.location(in: self)
+        upsilonTwo.send(.touchMoved(kappaFive))
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let t = touches.first else { return }
-        let loc = t.location(in: self)
-        world.send(.touchEnded(loc))
+        guard let lambdaFive = touches.first else { return }
+        let muFive = lambdaFive.location(in: self)
+        upsilonTwo.send(.touchEnded(muFive))
     }
 }

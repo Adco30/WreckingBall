@@ -1,20 +1,21 @@
+// Modified version with renamed variables
 import SwiftUI
 import Combine
 
 final class ParametersStore: ObservableObject {
-    @Published var params = PhysicsParameters()
+    @Published var zeta = PhysicsParameters()
 }
 
 final class PhysicsParameters: ObservableObject {
-    @Published var gravity: Double = 9.8
-    @Published var impulse: Double = 30
-    @Published var ballMass: Double = 15
-    @Published var ballRestitution: Double = 0.7
-    @Published var ballFriction: Double = 0.3
-    @Published var blockMass: Double = 2
-    @Published var blockRestitution: Double = 0.2
-    @Published var blockFriction: Double = 0.6
-    @Published var slingHeight: Double = 120
-    @Published var slingshotX: Double = 0.30
-    @Published var stackX: Double = 0.80
+    @Published var etaTwo: Double = 9.8
+    @Published var thetaTwo: Double = 30
+    @Published var omega: Double = 15
+    @Published var alphaTwo: Double = 0.7
+    @Published var gammaTwo: Double = 0.3
+    @Published var deltaTwo: Double = 2
+    @Published var epsilonTwo: Double = 0.2
+    @Published var zetaTwo: Double = 0.6
+    @Published var kappa: Double = 120
+    @Published var theta: Double = 0.30
+    @Published var iota: Double = 0.80
 }

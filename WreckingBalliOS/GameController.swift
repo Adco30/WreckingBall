@@ -1,151 +1,152 @@
+// Modified version with renamed variables
 import SpriteKit
 import Combine
 
 final class GameController: ObservableObject {
-    private let world: World
-    private let params: PhysicsParameters
-    unowned let scene: GameScene?
-    private var cancellables = Set<AnyCancellable>()
-    private var ball: Entity?
-    private var blocks: [Entity] = []
-    private var returnScheduled = false
+    private let nuTwo: World
+    private let xiTwo: PhysicsParameters
+    unowned let omicronTwo: GameScene?
+    private var piTwo = Set<AnyCancellable>()
+    private var rhoTwo: Entity?
+    private var sigmaTwo: [Entity] = []
+    private var tauTwo = false
 
     init(scene: GameScene, params: PhysicsParameters){
-        self.scene = scene
-        self.params = params
-        self.world = scene.world
-        setup()
+        self.omicronTwo = scene
+        self.xiTwo = params
+        self.nuTwo = scene.upsilonTwo
+        phiTwo()
     }
 
-    private func setup(){
-        let renderSys = RenderSystem(world: world)
-        scene.map { world.addSystem(InputSystem(scene: $0, world: world, params: params)) }
-        world.addSystem(renderSys)
+    private func phiTwo(){
+        let chiTwo = RenderSystem(world: nuTwo)
+        omicronTwo.map { nuTwo.addSystem(InputSystem(scene: $0, world: nuTwo, params: xiTwo)) }
+        nuTwo.addSystem(chiTwo)
 
-        params.$slingshotX.sink    { [weak self] _ in self?.updateSlingshot() }.store(in:&cancellables)
-        params.$stackX.sink        { [weak self] _ in self?.updateBlocks()   }.store(in:&cancellables)
-        params.$slingHeight.sink   { [weak self] _ in self?.updateSlingshot() }.store(in:&cancellables)
+        xiTwo.$theta.sink    { [weak self] _ in self?.psiTwo() }.store(in:&piTwo)
+        xiTwo.$iota.sink        { [weak self] _ in self?.omegaTwo()   }.store(in:&piTwo)
+        xiTwo.$kappa.sink   { [weak self] _ in self?.psiTwo() }.store(in:&piTwo)
 
         NotificationCenter.default
             .publisher(for: .restartGame)
             .sink { [weak self] _ in
-                self?.updateSlingshot()
+                self?.psiTwo()
             }
-            .store(in: &cancellables)
+            .store(in: &piTwo)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-            self?.updateSlingshot()
-            self?.updateBlocks()
+            self?.psiTwo()
+            self?.omegaTwo()
         }
     }
 
-    private func createBall(){
-        guard let s = scene else { return }
-        let e = Entity()
-        let node = SKShapeNode(circleOfRadius: 20)
-        node.name = "ball"
-        node.fillColor = .gray
-        node.strokeColor = .black
-        let body = SKPhysicsBody(circleOfRadius: 20)
-        body.isDynamic = false
-        body.mass = params.ballMass
-        body.restitution = params.ballRestitution
-        body.friction = params.ballFriction
-        node.physicsBody = body
-        node.position = s.slingshotTop()
-        e.add(RenderComponent(node: node))
-        e.add(TransformComponent(node.position))
-        let input = InputComponent()
-        input.draggable = true
-        e.add(input)
-        e.add(PhysicsComponent())
-        e.add(BallComponent())
-        world.add(e)
-        s.addChild(node)
-        ball = e
+    private func alphaThree(){
+        guard let betaThree = omicronTwo else { return }
+        let gammaThree = Entity()
+        let deltaThree = SKShapeNode(circleOfRadius: 20)
+        deltaThree.name = "ball"
+        deltaThree.fillColor = .gray
+        deltaThree.strokeColor = .black
+        let epsilonThree = SKPhysicsBody(circleOfRadius: 20)
+        epsilonThree.isDynamic = false
+        epsilonThree.mass = xiTwo.omega
+        epsilonThree.restitution = xiTwo.alphaTwo
+        epsilonThree.friction = xiTwo.gammaTwo
+        deltaThree.physicsBody = epsilonThree
+        deltaThree.position = betaThree.zetaThree()
+        gammaThree.add(RenderComponent(node: deltaThree))
+        gammaThree.add(TransformComponent(deltaThree.position))
+        let etaThree = InputComponent()
+        etaThree.thetaThree = true
+        gammaThree.add(etaThree)
+        gammaThree.add(PhysicsComponent())
+        gammaThree.add(BallComponent())
+        nuTwo.add(gammaThree)
+        betaThree.addChild(deltaThree)
+        rhoTwo = gammaThree
     }
 
-    private func makeBlock(at p: CGPoint) -> Entity {
-        let e = Entity()
-        let node = SKSpriteNode(color: .brown, size: CGSize(width: 40, height: 40))
-        node.position = p
-        let body = SKPhysicsBody(rectangleOf: node.size)
-        body.mass        = params.blockMass
-        body.restitution = params.blockRestitution
-        body.friction    = params.blockFriction
-        node.physicsBody = body
+    private func iotaThree(at kappaThree: CGPoint) -> Entity {
+        let lambdaThree = Entity()
+        let muThree = SKSpriteNode(color: .brown, size: CGSize(width: 40, height: 40))
+        muThree.position = kappaThree
+        let nuThree = SKPhysicsBody(rectangleOf: muThree.size)
+        nuThree.mass        = xiTwo.deltaTwo
+        nuThree.restitution = xiTwo.epsilonTwo
+        nuThree.friction    = xiTwo.zetaTwo
+        muThree.physicsBody = nuThree
 
-        e.add(RenderComponent(node: node))
-        e.add(TransformComponent(p))
-        e.add(PhysicsComponent())
-        e.add(BlockComponent())
+        lambdaThree.add(RenderComponent(node: muThree))
+        lambdaThree.add(TransformComponent(kappaThree))
+        lambdaThree.add(PhysicsComponent())
+        lambdaThree.add(BlockComponent())
 
-        scene?.addChild(node)
-        return e
+        omicronTwo?.addChild(muThree)
+        return lambdaThree
     }
 
-    private func createBlocks() {
-        guard let s = scene else { return }
+    private func xiThree() {
+        guard let omicronThree = omicronTwo else { return }
 
-        blocks.forEach { $0.get(RenderComponent.self)?.node.removeFromParent() }
-        world.send(.restarted)
-        blocks.removeAll()
+        sigmaTwo.forEach { $0.get(RenderComponent.self)?.node.removeFromParent() }
+        nuTwo.send(.restarted)
+        sigmaTwo.removeAll()
 
-        let base   = s.size.width * params.stackX
-        let size: CGFloat = 40
-        let positions = [
-            CGPoint(x: base - size,    y: s.slingshotTop().y),
-            CGPoint(x: base,           y: s.slingshotTop().y),
-            CGPoint(x: base + size,    y: s.slingshotTop().y),
-            CGPoint(x: base - size/2,  y: s.slingshotTop().y + size),
-            CGPoint(x: base + size/2,  y: s.slingshotTop().y + size),
-            CGPoint(x: base,           y: s.slingshotTop().y + size * 2)
+        let piThree   = omicronThree.size.width * xiTwo.iota
+        let rhoThree: CGFloat = 40
+        let sigmaTHree = [
+            CGPoint(x: piThree - rhoThree,    y: omicronThree.zetaThree().y),
+            CGPoint(x: piThree,           y: omicronThree.zetaThree().y),
+            CGPoint(x: piThree + rhoThree,    y: omicronThree.zetaThree().y),
+            CGPoint(x: piThree - rhoThree/2,  y: omicronThree.zetaThree().y + rhoThree),
+            CGPoint(x: piThree + rhoThree/2,  y: omicronThree.zetaThree().y + rhoThree),
+            CGPoint(x: piThree,           y: omicronThree.zetaThree().y + rhoThree * 2)
         ]
 
-        blocks = positions.map { pos in
-            let e = makeBlock(at: pos)
-            world.add(e)
-            return e
+        sigmaTwo = sigmaTHree.map { tauThree in
+            let upsilonThree = iotaThree(at: tauThree)
+            nuTwo.add(upsilonThree)
+            return upsilonThree
         }
     }
 
-    private func updateSlingshot(){
-        scene?.createSlingshot()
-        guard let node = ball?.get(RenderComponent.self)?.node else {
-            createBall()
+    private func psiTwo(){
+        omicronTwo?.phiThree()
+        guard let chiThree = rhoTwo?.get(RenderComponent.self)?.node else {
+            alphaThree()
             return
         }
-        let top = scene?.slingshotTop() ?? .zero
-        node.physicsBody?.velocity = .zero
-        node.physicsBody?.isDynamic = false
-        node.position = top
-        ball?.get(TransformComponent.self)?.pos = top
-        returnScheduled = false
+        let psiThree = omicronTwo?.zetaThree() ?? .zero
+        chiThree.physicsBody?.velocity = .zero
+        chiThree.physicsBody?.isDynamic = false
+        chiThree.position = psiThree
+        rhoTwo?.get(TransformComponent.self)?.pos = psiThree
+        tauTwo = false
     }
 
-    private func updateBlocks(){
-        createBlocks()
+    private func omegaTwo(){
+        xiThree()
     }
 
     func tick(dt: TimeInterval){
-        world.update(dt: dt)
+        nuTwo.update(dt: dt)
         guard
-            let s = scene,
-            let node = ball?.get(RenderComponent.self)?.node,
-            let body = node.physicsBody,
-            body.isDynamic,
-            !returnScheduled,
-            node.position.y <= s.groundHeight + 1
+            let omegaThree = omicronTwo,
+            let alphaFour = rhoTwo?.get(RenderComponent.self)?.node,
+            let betaFour = alphaFour.physicsBody,
+            betaFour.isDynamic,
+            !tauTwo,
+            alphaFour.position.y <= omegaThree.gammaFour + 1
         else { return }
-        returnScheduled = true
+        tauTwo = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            guard let self = self, let s = self.scene, let node = self.ball?.get(RenderComponent.self)?.node else { return }
-            node.physicsBody?.velocity = .zero
-            node.physicsBody?.isDynamic = false
-            let top = s.slingshotTop()
-            node.position = top
-            self.ball?.get(TransformComponent.self)?.pos = top
-            s.resetBands()
+            guard let self = self, let deltaFour = self.omicronTwo, let epsilonFour = self.rhoTwo?.get(RenderComponent.self)?.node else { return }
+            epsilonFour.physicsBody?.velocity = .zero
+            epsilonFour.physicsBody?.isDynamic = false
+            let zetaFour = deltaFour.zetaThree()
+            epsilonFour.position = zetaFour
+            self.rhoTwo?.get(TransformComponent.self)?.pos = zetaFour
+            deltaFour.etaFour()
         }
     }
 }

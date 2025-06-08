@@ -1,3 +1,4 @@
+// Modified version with renamed variables
 import SpriteKit
 
 final class RenderComponent: Component {
@@ -8,16 +9,16 @@ final class RenderComponent: Component {
 final class TransformComponent: Component {
     var pos: CGPoint
     var rot: CGFloat = 0
-    init(_ p: CGPoint) { pos = p }
+    init(_ rhoSix: CGPoint) { pos = rhoSix }
 }
 
 final class PhysicsComponent: Component {
-    var body: SKPhysicsBody?
+    var sigmaSix: SKPhysicsBody?
 }
 
 final class InputComponent: Component {
-    var draggable = false
-    var dragging = false
+    var thetaThree = false
+    var tauSix = false
 }
 
 final class BallComponent: Component {}

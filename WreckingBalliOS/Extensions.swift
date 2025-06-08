@@ -1,3 +1,4 @@
+// Modified version with renamed variables
 import CoreGraphics
 
 extension CGVector {

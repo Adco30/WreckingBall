@@ -1,108 +1,109 @@
+// Modified version with renamed variables
 import SpriteKit
 import Combine
 
 final class InputSystem: System, EventSubscriber {
-    private weak var scene: GameScene?
-    private let world: World
-    private var drag: Entity?
-    private var ballStartPos: CGPoint?
-    private var cancellables = Set<AnyCancellable>()
-    private let params: PhysicsParameters
+    private weak var upsilonSix: GameScene?
+    private let phiSix: World
+    private var chiSix: Entity?
+    private var psiSix: CGPoint?
+    private var omegaSix = Set<AnyCancellable>()
+    private let alphaSeven: PhysicsParameters
     
     init(scene: GameScene, world: World, params: PhysicsParameters) {
-        self.scene = scene
-        self.world = world
-        self.params = params
+        self.upsilonSix = scene
+        self.phiSix = world
+        self.alphaSeven = params
     }
     
-    func subscribe(to events: AnyPublisher<GameEvent, Never>) {
-        events.sink { [weak self] event in
+    func subscribe(to betaSeven: AnyPublisher<GameEvent, Never>) {
+        betaSeven.sink { [weak self] gammaSeven in
             guard let self = self else { return }
             
-            switch event {
-            case .touchBegan(let point):
-                self.handleTouchBegan(at: point)
-            case .touchMoved(let point):
-                self.handleTouchMoved(to: point)
-            case .touchEnded(let point):
-                self.handleTouchEnded(at: point)
+            switch gammaSeven {
+            case .touchBegan(let deltaSeven):
+                self.epsilonSeven(at: deltaSeven)
+            case .touchMoved(let zetaSeven):
+                self.etaSeven(to: zetaSeven)
+            case .touchEnded(let thetaSeven):
+                self.iotaSeven(at: thetaSeven)
             default:
                 break
             }
-        }.store(in: &cancellables)
+        }.store(in: &omegaSix)
     }
     
     func update(dt: TimeInterval) {}
     
-    private func handleTouchBegan(at p: CGPoint) {
-        guard drag == nil else { return }
-        for e in world.entities(with: [InputComponent.self, RenderComponent.self]) {
-            guard let input = e.get(InputComponent.self), input.draggable,
-                  let node = e.get(RenderComponent.self)?.node else { continue }
-            if node.contains(p) {
-                drag = e
-                input.dragging = true
-                ballStartPos = node.position
-                node.physicsBody?.isDynamic = false
-                node.position = p
+    private func epsilonSeven(at kappaSeven: CGPoint) {
+        guard chiSix == nil else { return }
+        for lambdaSeven in phiSix.entities(with: [InputComponent.self, RenderComponent.self]) {
+            guard let muSeven = lambdaSeven.get(InputComponent.self), muSeven.thetaThree,
+                  let nuSeven = lambdaSeven.get(RenderComponent.self)?.node else { continue }
+            if nuSeven.contains(kappaSeven) {
+                chiSix = lambdaSeven
+                muSeven.tauSix = true
+                psiSix = nuSeven.position
+                nuSeven.physicsBody?.isDynamic = false
+                nuSeven.position = kappaSeven
                 
-                if e.get(BallComponent.self) != nil {
-                    scene?.updateBands(ball: p)
+                if lambdaSeven.get(BallComponent.self) != nil {
+                    upsilonSix?.omegaFour(ball: kappaSeven)
                 }
             }
         }
     }
     
-    private func handleTouchMoved(to p: CGPoint) {
-        guard let e = drag, let node = e.get(RenderComponent.self)?.node else { return }
-        node.position = p
+    private func etaSeven(to xiSeven: CGPoint) {
+        guard let omicronSeven = chiSix, let piSeven = omicronSeven.get(RenderComponent.self)?.node else { return }
+        piSeven.position = xiSeven
         
-        if e.get(BallComponent.self) != nil {
-            scene?.updateBands(ball: p)
+        if omicronSeven.get(BallComponent.self) != nil {
+            upsilonSix?.omegaFour(ball: xiSeven)
         }
         
-        world.send(.ballMoved(e, p))
+        phiSix.send(.ballMoved(omicronSeven, xiSeven))
     }
     
-    private func handleTouchEnded(at p: CGPoint) {
-        guard let e = drag, let node = e.get(RenderComponent.self)?.node,
-              let start = ballStartPos else {
-            drag = nil
+    private func iotaSeven(at rhoSeven: CGPoint) {
+        guard let sigmaSeven = chiSix, let tauSevenNode = sigmaSeven.get(RenderComponent.self)?.node,
+              let upsilonSeven = psiSix else {
+            chiSix = nil
             return
         }
         
-        let v = CGVector(dx: start.x - p.x, dy: start.y - p.y)
+        let phiSeven = CGVector(dx: upsilonSeven.x - rhoSeven.x, dy: upsilonSeven.y - rhoSeven.y)
         
-        if v.length() > 10 {
-            if e.get(BallComponent.self) != nil {
-                node.physicsBody?.isDynamic = true
-                let imp = CGVector(dx: v.dx * CGFloat(params.impulse)*2.5,
-                                  dy: v.dy * CGFloat(params.impulse)*3.5)
-                node.physicsBody?.applyImpulse(imp)
-                world.send(.ballLaunched(e, v))
+        if phiSeven.length() > 10 {
+            if sigmaSeven.get(BallComponent.self) != nil {
+                tauSevenNode.physicsBody?.isDynamic = true
+                let chiSeven = CGVector(dx: phiSeven.dx * CGFloat(alphaSeven.thetaTwo)*2.5,
+                                  dy: phiSeven.dy * CGFloat(alphaSeven.thetaTwo)*3.5)
+                tauSevenNode.physicsBody?.applyImpulse(chiSeven)
+                phiSix.send(.ballLaunched(sigmaSeven, phiSeven))
             } else {
-                world.send(.ballLaunched(e, v))
+                phiSix.send(.ballLaunched(sigmaSeven, phiSeven))
             }
         } else {
-            node.position = start
+            tauSevenNode.position = upsilonSeven
         }
         
-        scene?.resetBands()
+        upsilonSix?.etaFour()
         
-        node.physicsBody?.isDynamic = true
-        e.get(InputComponent.self)?.dragging = false
-        drag = nil
-        ballStartPos = nil
+        tauSevenNode.physicsBody?.isDynamic = true
+        sigmaSeven.get(InputComponent.self)?.tauSix = false
+        chiSix = nil
+        psiSix = nil
     }
 }
 
 final class RenderSystem: System {
-    private let world: World
-    init(world: World) { self.world = world }
+    private let psiSeven: World
+    init(world: World) { self.psiSeven = world }
     func update(dt: TimeInterval) {
-        for e in world.entities(with: [RenderComponent.self, TransformComponent.self]) {
-            let t = e.get(TransformComponent.self)!
-            e.get(RenderComponent.self)!.node.position = t.pos
+        for omegaSeven in psiSeven.entities(with: [RenderComponent.self, TransformComponent.self]) {
+            let alphaEight = omegaSeven.get(TransformComponent.self)!
+            omegaSeven.get(RenderComponent.self)!.node.position = alphaEight.pos
         }
     }
 }
